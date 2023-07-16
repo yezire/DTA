@@ -5,6 +5,7 @@ import torch
 import os
 from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.metrics import roc_auc_score, average_precision_score
+from tqdm import tqdm
 
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -60,7 +61,7 @@ def train_and_evaluate(args, TDAtrain, TDAvalid, TDAtest, verbose=True):
     best_valid_auc = 0
     test_aupr = 0
     test_auc = 0
-    for i in range(args.num_steps):
+    for i in tqdm(range(args.num_steps),desc='train_and_evaluate steps'):
         model.train()
         model.zero_grad()
         if args.model == 'CreaTDA_og':
@@ -180,7 +181,7 @@ if __name__ == '__main__':
             elif int(tda_o[i][j]) == 0:
                 whole_negative_index.append([i, j])
 
-    for r in range(args.round):
+    for r in tqdm(range(args.round),desc='cross validation round'):
         print('sample round', r+1)
         negative_sample_index = np.arange(len(whole_negative_index))
 

@@ -5,7 +5,8 @@ import os
 import argparse
 import random
 from sklearn.metrics import roc_auc_score, average_precision_score
-from utils import row_normalize, get_re_args, set_seed
+from utils import row_normalize,get_re_args,set_seed
+from tqdm import tqdm
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 os.chdir(BASE_DIR)
@@ -52,7 +53,7 @@ def retrain(args, TDAtrain, verbose=True):
     ground_truth_train = [ele[2] for ele in TDAtrain]
     best_train_aupr = 0
     best_train_auc = 0
-    for i in range(args.num_steps):
+    for i in tqdm(range(args.num_steps),desc='retrain step'):
         model.train()
         model.zero_grad()
         if args.model == 'CreaTDA_og':
